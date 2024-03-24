@@ -33,8 +33,8 @@ class MyEasyFramework(BaseHTTPRequestHandler):
                     self.send_html('error.html', 404)
 
     def do_POST(self):
-        print(f"{self.headers.get('Content-Length') = }")
-        data = self.rfile.read(int(self.headersget('Content-Length')))
+        data = self.rfile.read(int(self.headers.get('Content-Length')))
+        print(data)
 
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         client_socket.sendto(data, (SOCKET_HOST, SOCKET_PORT))
@@ -66,9 +66,9 @@ class MyEasyFramework(BaseHTTPRequestHandler):
 def save_data_form_form(data):
     parse_data = urllib.parse.unquote_plus(data.decode())
     try:
-        parse_dict = {datetime.now(): {key: value for key, value in [el.split('=') for el in parse_data.split('&')]}}
+        parse_dict = {str(datetime.now()): {key: value for key, value in [el.split('=') for el in parse_data.split('&')]}}
         with open('storage/data.json', 'w', encoding='utf-8') as file:
-            json.dump(parse_dict, file, ensure_ascii=False, indent=4)
+            json.dump(parse_dict, file)
     except ValueError as err:
         logging.error(err)
     except OSError as err:
